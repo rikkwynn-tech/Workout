@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="5-Day Split">
+<link rel="apple-touch-icon" id="ti" href="">
+<title>5-Day Split</title>
+<style>
+:root{--bg:#eef1f4;--card:#fff;--tx:#16202a;--mu:#64707d;--ac:#0f766e;--on:#fff;--ln:#dde3e9;--in:#f3f6f8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1216;--card:#161e25;--tx:#e8eef2;--mu:#8b98a5;--ac:#2dd4bf;--on:#062b27;--ln:#26313a;--in:#0f161b}}
+:root[data-theme="dark"]{--bg:#0d1216;--card:#161e25;--tx:#e8eef2;--mu:#8b98a5;--ac:#2dd4bf;--on:#062b27;--ln:#26313a;--in:#0f161b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;padding:0 14px 96px}
+header{padding:16px 2px 10px}
+h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.02em}
+header p{margin:2px 0 0;color:var(--mu);font-size:14px}
+.bar{height:6px;background:var(--ln);border-radius:3px;margin:12px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .25s}
+.cnt{font-size:13px;color:var(--mu)}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 12px 6px;margin:12px 0}
+h3{margin:0;font-size:17px;font-weight:700}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hw{flex:none;border:1px solid var(--ln);background:var(--in);color:var(--ac);font-weight:700;font-size:13px;padding:7px 12px;border-radius:16px}
+.how{margin:8px 0 4px;padding:10px 12px;background:var(--in);border-radius:10px;font-size:14.5px}
+.how p{margin:0 0 6px}.how ol{margin:0 0 8px;padding-left:20px}.how li{margin:3px 0}
+.how a{color:var(--ac);font-weight:700;text-decoration:none}
+.mu{margin:2px 0 0;color:var(--mu);font-size:14px}.sm{font-size:12.5px}
+.row{display:flex;align-items:center;gap:8px;margin:8px 0}
+.sn{width:20px;text-align:center;color:var(--mu);font-weight:700}
+.row input{flex:1;min-width:0;height:46px;border:1px solid var(--ln);background:var(--in);color:var(--tx);border-radius:10px;font-size:18px;text-align:center;font-weight:600}
+.row input:focus{outline:2px solid var(--ac);outline-offset:1px}
+.ab{flex:1;color:var(--mu)}
+.ck{width:46px;height:46px;border-radius:10px;border:2px solid var(--ln);background:transparent;color:transparent;font-size:22px;font-weight:800}
+.ck.on{background:var(--ac);border-color:var(--ac);color:var(--on)}
+.acts{display:flex;gap:10px;margin:18px 0}
+.acts button{flex:1;height:50px;border-radius:12px;font-size:16px;font-weight:700;border:1px solid var(--ln);background:var(--card);color:var(--tx)}
+.acts .p{background:var(--ac);border-color:var(--ac);color:var(--on)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--ln);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;border:0;background:none;color:var(--mu);padding:6px 0;font-size:11.5px;border-radius:10px}
+nav button b{display:block;font-size:17px;color:inherit}
+nav button.on{color:var(--ac);background:var(--in)}
+#rest{position:fixed;right:14px;bottom:calc(74px + env(safe-area-inset-bottom,0px));background:var(--ac);color:var(--on);font-weight:800;font-size:18px;padding:12px 18px;border-radius:26px;display:none}
+</style></head>
+<body>
+<header><h1 id="t"></h1><p id="s"></p><div class="bar"><i id="pb"></i></div><div class="cnt" id="pc"></div></header>
+<main id="m"></main>
+<div class="acts"><button id="clr">Clear day</button><button id="fin" class="p">Finish workout</button></div>
+<div id="rest"></div>
+<nav id="nav"></nav>
+<script>
+const D=[
+{n:"Upper A",f:"Chest emphasis",l:"Chest",ex:[
+["Converging chest press",3,"6-8"],["High-to-low cable flies",3,"12-15"],["Smith machine incline press",3,"8-10"],["Plate loaded back rows",3,"8-10"],["Lat pull downs",3,"8-10"],["Machine lateral raises",3,"12-15"],["Rope push downs",3,"10-12"],["Cross body dumbbell curls",3,"6-8"],["Ab work",3,"",1]]},
+{n:"Lower A",f:"Quad emphasis",l:"Quads",ex:[
+["Leg extensions",3,"12-15","knee warm-up, quad pre-fatigue"],["Landmine squats",3,"8-10"],["Bulgarian split squats",3,"8-10","per leg"],["Prone leg curls",3,"10-12"],["Standing calf raises",3,"12-15"],["Wrist curls",3,"15"],["Reverse curls",3,"12"]]},
+{n:"Upper B",f:"Back emphasis",l:"Back",ex:[
+["Neutral grip pull ups",3,"8-10"],["Supported dumbbell rows",3,"8-10"],["Low cable back rows",3,"12-15"],["Dumbbell chest press",3,"10-12"],["Face pulls",3,"12-15"],["Overhead rope extensions",3,"10-12"],["Hammer curls",3,"10-12"]]},
+{n:"Lower B",f:"Posterior chain emphasis",l:"Posterior",ex:[
+["Romanian deadlifts",3,"8-10"],["Seated leg curls",3,"10-12"],["Trap bar deadlifts",3,"8-10"],["Unilateral leg press",3,"8-10","per leg"],["Leg extensions",3,"15"],["Seated calf raises",3,"12-15"],["Ab and core work",3,"",1]]},
+{n:"Upper C",f:"Shoulders, biceps, triceps",l:"Arms",ex:[
+["Dumbbell shoulder press",3,"8-10"],["Landmine press",3,"8-10"],["Dumbbell lateral raises",3,"12-15"],["Reverse pec deck",3,"12-15"],["Neutral grip tricep extensions",3,"8-10"],["Rope push downs",3,"12-15"],["Preacher curls",3,"6-8"],["Incline dumbbell curls",3,"10-12"]]}
+];
+let S=null;
+try{S=JSON.parse(localStorage.getItem("split1"))}catch(e){}
+S=S||{day:0,cur:{},hist:{},last:{}};
+const save=()=>{try{localStorage.setItem("split1",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+function rows(i){const c=S.cur[S.day]||(S.cur[S.day]={});return c[i]||(c[i]=[])}
+function prog(){let t=0,n=0;D[S.day].ex.forEach((e,i)=>{const r=(S.cur[S.day]||{})[i]||[];for(let s=0;s<e[1];s++){t++;if(r[s]&&r[s].d)n++}});
+$("#pb").style.width=(t?n/t*100:0)+"%";$("#pc").textContent=n+" of "+t+" sets done"+(S.last[S.day]?" · last finished "+S.last[S.day]:"")}
+function render(){
+const d=D[S.day];let h="";
+d.ex.forEach((e,i)=>{
+const nm=e[0],sets=e[1],reps=e[2],note=e[3],ab=e[4],hs=S.hist[nm]||[],r=rows(i);let x="";
+for(let s=0;s<sets;s++){const v=r[s]||{},p=hs[s]||hs[hs.length-1]||{};
+x+='<div class="row"><span class="sn">'+(s+1)+'</span>'+(ab?'<span class="ab">Round '+(s+1)+'</span>':
+'<input inputmode="decimal" placeholder="'+(p.w||"weight")+'" value="'+(v.w||"")+'" data-i="'+i+'" data-s="'+s+'" data-k="w"><input inputmode="numeric" placeholder="'+(p.r||"reps")+'" value="'+(v.r||"")+'" data-i="'+i+'" data-s="'+s+'" data-k="r">')+
+'<button class="ck'+(v.d?" on":"")+'" data-i="'+i+'" data-s="'+s+'" aria-label="Set done">✓</button></div>'}
+const last=hs.length&&!ab?"Last time: "+hs.map(a=>(a.w||"–")+" × "+(a.r||"–")).join(", "):"";
+h+='<section class="card"><div class="hd"><h3>'+nm+'</h3><button class="hw">How to</button></div><p class="mu">'+(ab?sets+" rounds":sets+" × "+reps)+(note?", "+note:"")+'</p>'+(last?'<p class="mu sm">'+last+'</p>':"")+how(nm)+x+'</section>'});
+$("#m").innerHTML=h;
+$("#t").textContent="Day "+(S.day+1)+": "+d.n;$("#s").textContent=d.f;
+$("#nav").innerHTML=D.map((q,i)=>'<button data-d="'+i+'" class="'+(i==S.day?"on":"")+'"><b>'+(i+1)+'</b>'+q.l+'</button>').join("");
+prog()}
+const AB="Abs, core|Pick two or three moves, such as cable crunches, hanging knee raises or planks|Curl your ribs toward your hips instead of just pulling your head forward|Exhale as you crunch, move slowly, and avoid arching your lower back";
+const H={
+"Converging chest press":"Chest, front delts, triceps|Set the seat so the handles line up with mid-chest; pin shoulder blades back and down|Press forward until arms are nearly straight without locking elbows|Lower for 2-3 seconds until you feel a stretch across the chest",
+"High-to-low cable flies":"Lower chest|Pulleys set high; step forward with a slight lean and a soft bend in the elbows|Sweep your hands down and together toward your hips in a wide arc|Squeeze, then return slowly until you feel a chest stretch",
+"Smith machine incline press":"Upper chest, shoulders, triceps|Bench at about 30 degrees, bar over upper chest, shoulder blades pinned back|Unrack and lower to the upper chest with elbows about 45 degrees from your body|Press straight up with feet planted, then rotate the bar to re-rack",
+"Plate loaded back rows":"Lats, mid-back, biceps|Brace yourself on the pad or stance, arms fully extended to start|Pull your elbows back toward your hips and squeeze your shoulder blades|Pause briefly, then lower under control without shrugging",
+"Lat pull downs":"Lats, biceps|Thighs locked under the pad, grip slightly wider than shoulders, slight lean back|Drive elbows down toward your ribs, bringing the bar to your upper chest|Let the bar rise slowly until arms are fully stretched; no swinging",
+"Machine lateral raises":"Side delts|Adjust the seat so your shoulders line up with the machine pivots|Raise your elbows out to about shoulder height, not higher|Lower slowly and keep your shoulders down away from your ears",
+"Rope push downs":"Triceps|Elbows pinned to your sides with a slight forward lean|Push down and spread the rope apart at the bottom until arms are straight|Return until forearms are just past 90 degrees; only the forearms move",
+"Cross body dumbbell curls":"Biceps, brachialis|Stand tall with the dumbbell at your side and elbow fixed|Curl the weight across your body toward the opposite shoulder|Lower fully and slowly without swinging your torso",
+"Ab work":AB,
+"Leg extensions":"Quads|Back against the pad, knees lined up with the machine pivot, pad on your lower shins|Extend until your legs are straight and squeeze your quads at the top|Lower for 2-3 seconds; keep the weight light as a warm-up",
+"Landmine squats":"Quads, glutes|Hold the bar end at chest height with both hands, feet shoulder-width apart|Sit down between your hips with chest up and heels flat|Drive up through your whole foot; the bar angle helps you stay upright",
+"Bulgarian split squats":"Quads, glutes|Back foot on a bench behind you, front foot about two feet ahead|Lower straight down until the front thigh is near parallel, torso upright|Push through the front heel to stand; finish all reps on one leg, then switch",
+"Prone leg curls":"Hamstrings|Lie face down with the pad just above your heels and hips pressed into the bench|Curl your heels toward your glutes with a smooth squeeze|Lower slowly and keep your hips from lifting",
+"Standing calf raises":"Calves|Balls of feet on the platform, shoulders under pads, legs nearly straight|Rise as high as you can onto your toes and pause|Lower fully for a deep stretch at the bottom",
+"Wrist curls":"Forearm flexors|Rest forearms on your thighs or a bench, palms up, wrists past the edge|Curl the weight up using only your wrists|Lower slowly until your wrists are fully extended",
+"Reverse curls":"Forearms, brachioradialis|Overhand grip (palms down), elbows by your sides|Curl up without letting your wrists bend back|Lower slowly under control",
+"Neutral grip pull ups":"Lats, biceps|Palms facing each other; hang with arms straight and shoulders engaged|Pull elbows down toward your ribs until your chin clears the handles|Lower for 2-3 seconds to a full hang; no kipping",
+"Supported dumbbell rows":"Mid-back, lats|Chest on an incline bench with dumbbells hanging straight down|Pull your elbows back and up, squeezing shoulder blades together|Lower slowly to a full stretch",
+"Low cable back rows":"Mid-back, lats|Sit tall with a slight knee bend and arms extended|Pull the handle to your lower ribs and squeeze your shoulder blades|Return slowly and stay upright; don't rock your torso",
+"Dumbbell chest press":"Chest, triceps, shoulders|Lie on a flat bench with dumbbells at chest height and shoulder blades pinned back|Press up and slightly inward until arms are nearly straight|Lower with control until you feel a chest stretch, elbows about 45 degrees from your body",
+"Face pulls":"Rear delts, upper back|Cable at about face height, rope in both hands, step back to create tension|Pull toward your face, spreading your hands apart with elbows high|Squeeze your rear delts, then return slowly",
+"Overhead rope extensions":"Triceps (long head)|Face away from the cable with the rope behind your head and elbows pointing forward|Straighten your arms up and forward, keeping elbows still|Lower behind your head until you feel a triceps stretch",
+"Hammer curls":"Biceps, brachialis, forearms|Palms facing each other, elbows at your sides|Curl up without swinging|Lower slowly to full extension",
+"Romanian deadlifts":"Hamstrings, glutes|Hold the weight at your thighs with soft knees and chest up|Push your hips back and slide the weight down your legs until you feel a hamstring stretch|Drive hips forward to stand; keep your back flat the whole time",
+"Seated leg curls":"Hamstrings|Pad above your heels, thigh pad snug, back against the seat|Curl your heels down and back, squeezing your hamstrings|Return slowly through the full range",
+"Trap bar deadlifts":"Quads, glutes, hamstrings, back|Stand centered in the bar, hips back, grip the handles with chest up|Brace your core, then push the floor away until you stand tall|Lower by hinging your hips back first, bar close to your body, back flat",
+"Unilateral leg press":"Quads, glutes|Place one foot mid-platform with hips and back flat against the seat|Lower until your knee is about 90 degrees without your lower back rounding|Press through your whole foot without locking the knee; finish one leg, then switch",
+"Seated calf raises":"Calves (soleus)|Knees under the pad, balls of your feet on the platform|Rise as high as you can and pause|Lower for a deep stretch",
+"Ab and core work":AB,
+"Dumbbell shoulder press":"Shoulders, triceps|Sit with back support, dumbbells at shoulder height, ribs down|Press up until arms are nearly straight|Lower to about ear level with control",
+"Landmine press":"Shoulders, upper chest, triceps|Hold the bar end at your shoulder in a staggered stance and brace your core|Press up and forward in a slight arc until your arm is straight|Lower slowly back to your shoulder without leaning back",
+"Dumbbell lateral raises":"Side delts|Light dumbbells at your sides, slight bend in elbows, slight forward lean|Raise your arms out to shoulder height, leading with the elbows|Lower slowly; don't swing or shrug",
+"Reverse pec deck":"Rear delts, upper back|Face the pad with handles at shoulder height and a slight bend in your elbows|Sweep your arms back and out in a wide arc, squeezing your shoulder blades|Return slowly without using momentum",
+"Neutral grip tricep extensions":"Triceps|Lie on a bench holding dumbbells or a neutral-grip bar, palms facing each other, arms straight up|Bend only at the elbows, lowering toward your forehead or just behind your head|Extend back to straight without letting your elbows flare",
+"Preacher curls":"Biceps|Upper arms flat on the pad with armpits at the top edge|Curl up and squeeze at the top|Lower slowly to nearly straight (don't drop) and keep your shoulders down",
+"Incline dumbbell curls":"Biceps (long head)|Bench at about 45-60 degrees with arms hanging straight down behind your torso|Curl up without letting your elbows drift forward|Lower fully to a deep biceps stretch"
+};
+function how(nm){const a=(H[nm]||"").split("|");if(!a[0])return"";
+return '<div class="how" hidden><p><b>Works:</b> '+a[0]+'</p><ol>'+a.slice(1).map(x=>'<li>'+x+'</li>').join("")+'</ol><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(nm+" proper form")+'" target="_blank" rel="noopener">▶ Watch video demos</a></div>'}
+let tm=null,left=0;
+function rest(){clearInterval(tm);left=45;const el=$("#rest");el.style.display="block";
+const f=()=>{el.textContent="Rest "+Math.floor(left/60)+":"+String(left%60).padStart(2,"0");if(left--<=0){clearInterval(tm);el.style.display="none"}};f();tm=setInterval(f,1000)}
+$("#rest").onclick=()=>{clearInterval(tm);$("#rest").style.display="none"};
+$("#m").addEventListener("input",e=>{const t=e.target;if(!t.dataset.k)return;const r=rows(+t.dataset.i),s=+t.dataset.s;r[s]=r[s]||{};r[s][t.dataset.k]=t.value;save()});
+$("#m").addEventListener("click",e=>{const w=e.target.closest(".hw");if(w){const p=w.closest(".card").querySelector(".how");if(p){p.hidden=!p.hidden;w.textContent=p.hidden?"How to":"Hide"}return}const b=e.target.closest(".ck");if(!b)return;const r=rows(+b.dataset.i),s=+b.dataset.s;r[s]=r[s]||{};r[s].d=!r[s].d;b.classList.toggle("on",!!r[s].d);save();prog();if(r[s].d)rest()});
+$("#nav").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.day=+b.dataset.d;save();render();scrollTo(0,0)});
+$("#fin").onclick=()=>{if(!confirm("Save this workout and clear the checkboxes?"))return;
+D[S.day].ex.forEach((e,i)=>{const r=rows(i);const out=[];let any=false;for(let s=0;s<e[1];s++){const v=r[s]||{};if(v.w||v.r||v.d)any=true;out.push({w:v.w||"",r:v.r||""})}if(any&&!e[4])S.hist[e[0]]=out});
+S.cur[S.day]={};S.last[S.day]=new Date().toLocaleDateString(undefined,{month:"short",day:"numeric"});save();render();scrollTo(0,0)};
+$("#clr").onclick=()=>{if(confirm("Clear everything entered for this day?")){S.cur[S.day]={};save();render()}};
+try{const c=document.createElement("canvas");c.width=c.height=180;const g=c.getContext("2d");g.fillStyle="#0f766e";g.fillRect(0,0,180,180);g.fillStyle="#fff";g.font="800 96px -apple-system,Helvetica,Arial";g.textAlign="center";g.textBaseline="middle";g.fillText("5",90,96);g.font="700 24px -apple-system,Helvetica,Arial";g.fillText("DAY SPLIT",90,152);$("#ti").href=c.toDataURL("image/png")}catch(e){}
+render();
+</script></body></html>
